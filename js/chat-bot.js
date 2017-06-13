@@ -13,28 +13,58 @@ function chatBot() {
 	 * @param input - input chat string
 	 * @return reply of chat-bot
 	 */
-	var name, trainer;
+	var name, trainer, rival, Rival;
  	var pokeList = [];
 	var actions = [];
 
 	var firstStage = false;
 	var secondStage = false;
+	var thirdStage = false;
 
 	this.respondTo = function(input) {
 	
 		this.input = input.toLowerCase();
 		
 		if(firstStage){
-			if(this.match('1'))
-				pokeList.push("Squirtle");
-			else if(this.match('2'))
-				pokeList.push("Squirtle");
-			else
-				pokeList.push("Squirtle");
+			var temp;
+			if(this.match('1')){
+				pokeList.push(new Pokemon("Squirtle", 100, 100, 100, "Water"));
+			}
+			else if(this.match('2')){
+				temp = new Pokemon("Squirtle", 100, 100, 100, "Water")
+				pokeList.push(temp);
+			}
+			else{
+				temp = new Pokemon("Squirtle", 100, 100, 100, "Water")
+				pokeList.push(temp);
+			}
 
-			actions.pop().pop().pop()
-			return "You have just recieved " + pokeList[0];
+			actions.pop()
+			actions.pop()
+			actions.pop()
+
+			secondStage = true;
+			firstStage = false;
+
+			return ["You have just recieved " + pokeList[0].getName(),
+
+			"What shall your rival's name be?"];
 		}
+		else if(secondStage){
+			rival = input;
+
+			Rival = new trainer(rival)
+
+			return ["Ah so your rival's name is " + rival, "Looks like he wants to challenge you to a battle!",
+			"Get ready for your first Pokemon battle!"]
+
+			secondStage = false;
+			thirdStage = true;
+		}
+		else if(thirdStage){
+			battle(rival);
+		}
+
 
 		if(this.match('(hi|hello|hey|hola|howdy)(\\s|!|\\.|$)'))
 			return "um... hi?";
@@ -73,7 +103,7 @@ function chatBot() {
 	 * @return boolean - whether or not the input string matches the regex
 	 */
 	this.match = function(regex) {
-	
 		return new RegExp(regex).test(this.input);
 	}
+
 }
